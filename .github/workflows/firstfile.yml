@@ -1,31 +1,31 @@
 name: node_project
 on:           
-  push:
+  push:           # trigger
     branches:
       - main
       - dev
-  pull_request:
+  pull_request:    #trigger type
     branches:
       - main
-      - release/*
+      - release/*      # sub-branches are accpted 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: get_code
-        uses: actions/checkout@v6
-      - name: install nodejs
-        uses: actions/setup-node@v4
+      - name: get_code      # checkout command (brings alredy written code and executes it)
+        uses: actions/checkout@v6       # pull code from repo to ubuntu machine 
+      - name: install nodejs            # install nodejs
+        uses: actions/setup-node@v4  
         with:
-          node-version: '20'
+          node-version: '20'            # version
       - name: install dependencies
         run: npm ci
       - name: run test
-        run: npm run test
+        run: npm run test      # command to test- cases
   deploy:
-    needs: test
+    needs: test     # depends on task
     runs-on: ubuntu-latest
-    steps:
+    steps: 
       - name: get_code
         uses: actions/checkout@v6
       - name: install nodejs
@@ -33,10 +33,21 @@ jobs:
         with:
           node-version: '20'
       - name: install dependencies
-        run: npm ci
+        run: npm ci        # command to isntall dependencies  
       - name: build node_project
-        run: npm run build
+        run: npm run build      #command to build
       - name: deploy
         run: echo "deploying application"
         
     
+# comapring commands in dotnet and node.js
+# IN .net to install    ---> dotnet restore ----> IN node, command is --> npm ci
+# clean previous builds ---> dotnet clean           ---> npm run clean
+# to test the test-cases---> dotnet test            ---> npm test
+# to compile            ---> dotnet compile         ---> npm run build
+# to package            ---> dotnet publish          ---> npm pack 
+
+# we write 2 jobs 
+# 1st job ---> install dependencies & test
+# 2nd job ---> install dependencies , build and deploy
+
